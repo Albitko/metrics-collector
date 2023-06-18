@@ -1,0 +1,48 @@
+vaults:
+
+  - name: "vETH"
+    chain: "ETH"
+    address: "0x3edbE670D03C4A71367dedA78E73EA4f8d68F2E4"
+    decimals: 18
+    # `want-token-name` in coin gecko-id format
+    want-token-name: "weth"
+    want-token-address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+    want-token-decimals: 18
+    strategies:
+      - name: "RocketAuraStrategy"
+        address: "0xF31080aF7871567bce197793439d28eb99DFae27"
+        # `pool` from defilama
+        pool: "6429fd3b-af61-4e15-a4b4-34819fb8f4ea"
+
+      - name: "LidoAuraStrategy"
+        address: "0xf0bFd2a1d8a4105c84a855Dbc24f852a55EAAda3"
+        pool: "10d93c84-d7bd-4ef2-8b74-1447101ee0dc"
+
+
+  - name: "dVault"
+    chain: "ETH"
+    address: "0xf62A24EbE766d0dA04C9e2aeeCd5E86Fac049B7B"
+    decimals: 18
+    want-token-name: "usd-coin"
+    want-token-address: "0xf62A24EbE766d0dA04C9e2aeeCd5E86Fac049B7B"
+    want-token-decimals: 6
+    strategies:
+      - name: "AuraBALStrategy"
+        address: "0xC1aaad55E68042e7CecC958a8DB7ca4617B8E148"
+        pool: "f165e35b-2d25-4928-be63-ad8cea636b4a"
+
+      - name: "AuraWETHStrategy"
+        address: "0x99A4810E9c0DBD489EDABD009530bf5695731b23"
+        pool: "adadd1cb-40ae-4692-b8f2-2a77a9e470f3"
+
+      - name: "CVXStrategy"
+        address: "0x37EE9b268ee9F55C307B6a974496FA733f82C8B3"
+        pool: "25d9dc49-3182-493a-bda4-0db53b25f457"
+
+      - name: "FXSStrategy"
+        address: "0x6770Ba38F91b9915ea935f39B15ffBB7Dd2622cA"
+        pool: "919bf4d2-3129-475a-8914-4e3f02d8574e"
+
+      - name: "YCRVStrategy"
+        address: "0xBfcBBF26aCB88D4Fd529DCaeBC3dE6083ccC8746"
+        pool: "320550a3-b7c4-4017-a5dd-f3ebed459470"
