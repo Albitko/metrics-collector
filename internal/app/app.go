@@ -1,7 +1,6 @@
 package app
 
 import (
-	"fmt"
 	"log"
 	"time"
 
@@ -13,6 +12,7 @@ import (
 	"github.com/Albitko/metrics-collector/internal/collector/strategy_collector"
 	"github.com/Albitko/metrics-collector/internal/collector/vault_collector"
 	"github.com/Albitko/metrics-collector/internal/entity"
+	"github.com/Albitko/metrics-collector/internal/repo"
 	"github.com/Albitko/metrics-collector/internal/utils"
 )
 
@@ -35,13 +35,13 @@ func Run(contractsCfg entity.ContractsSettings) {
 	httpClient := resty.New()
 	rpc := utils.NewRPC()
 	defer rpc.Close()
+	db := repo.New(nil, "postgres://postgres@localhost:5432/postgres")
+	defer db.Close()
 
 	price = price_collector.New(contractsCfg, httpClient)
 	strategy = strategy_collector.New(contractsCfg, httpClient, rpc)
 	vault = vault_collector.New(contractsCfg, rpc)
 	balance = balance_collector.New(contractsCfg, httpClient)
-
-	fmt.Println(balance)
 
 	s := gocron.NewScheduler(time.UTC)
 	s.SingletonModeAll()
