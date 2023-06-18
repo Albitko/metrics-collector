@@ -7,6 +7,7 @@ import (
 	"github.com/go-co-op/gocron"
 	"github.com/go-resty/resty/v2"
 
+	"github.com/Albitko/metrics-collector/internal/collector/balance_collector"
 	"github.com/Albitko/metrics-collector/internal/collector/price_collector"
 	"github.com/Albitko/metrics-collector/internal/collector/strategy_collector"
 	"github.com/Albitko/metrics-collector/internal/collector/vault_collector"
@@ -20,14 +21,14 @@ type collector interface {
 
 func mustScheduleJob(s *gocron.Scheduler, job interface{}) {
 	var err error
-	_, err = s.Every(1).Minute().DoWithJobDetails(job)
+	_, err = s.Every(5).Minute().DoWithJobDetails(job)
 	if err != nil {
 		log.Fatalln("error scheduling job", err)
 	}
 }
 
 func Run(contractsCfg entity.ContractsSettings) {
-	var price, strategy, vault collector
+	var price, strategy, vault, balance collector
 
 	httpClient := resty.New()
 	rpc := utils.NewRPC()
@@ -36,12 +37,14 @@ func Run(contractsCfg entity.ContractsSettings) {
 	price = price_collector.New(contractsCfg, httpClient)
 	strategy = strategy_collector.New(contractsCfg, httpClient, rpc)
 	vault = vault_collector.New(contractsCfg, rpc)
+	balance = balance_collector.New(contractsCfg, httpClient)
 
 	s := gocron.NewScheduler(time.UTC)
 	s.SingletonModeAll()
 	mustScheduleJob(s, price.Collect)
 	mustScheduleJob(s, strategy.Collect)
 	mustScheduleJob(s, vault.Collect)
+	mustScheduleJob(s, balance.Collect)
 
 	s.StartBlocking()
 

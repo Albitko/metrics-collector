@@ -37,3 +37,15 @@ type DeFiLamaResponse struct {
 		ApyBaseInception interface{} `json:"apyBaseInception"`
 	} `json:"data"`
 }
+
+type ChainBaseHoldersResponse struct {
+	Code    int      `json:"code"`
+	Message string   `json:"message"`
+	Data    []string `json:"data"`
+}
+
+type EtherScanResp struct {
+	Status  string `json:"status"`
+	Message string `json:"message"`
+	Result  string `json:"result"`
+}
