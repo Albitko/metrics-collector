@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/go-co-op/gocron"
 	"github.com/go-resty/resty/v2"
 
 	"github.com/Albitko/metrics-collector/internal/entity"
@@ -29,7 +28,7 @@ type strategyCollector struct {
 	rpcClient  rpc
 }
 
-func (sc *strategyCollector) Collect(job gocron.Job) {
+func (sc *strategyCollector) Collect() {
 	fmt.Println("start collecting strategies APY at: ", time.Now().String())
 
 	poolsResponse := &entity.DeFiLamaResponse{}

@@ -6,7 +6,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/go-co-op/gocron"
 	"github.com/go-resty/resty/v2"
 
 	"github.com/Albitko/metrics-collector/internal/entity"
@@ -20,7 +19,7 @@ type priceCollector struct {
 	httpClient      *resty.Client
 }
 
-func (pc *priceCollector) Collect(job gocron.Job) {
+func (pc *priceCollector) Collect() {
 	fmt.Println("start collecting prices at: ", time.Now().String())
 
 	var wg sync.WaitGroup

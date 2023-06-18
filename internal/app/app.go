@@ -1,6 +1,7 @@
 package app
 
 import (
+	"fmt"
 	"log"
 	"time"
 
@@ -16,12 +17,13 @@ import (
 )
 
 type collector interface {
-	Collect(job gocron.Job)
+	Collect()
 }
 
 func mustScheduleJob(s *gocron.Scheduler, job interface{}) {
 	var err error
-	_, err = s.Every(5).Minute().DoWithJobDetails(job)
+	// at every 5th minute.
+	_, err = s.Cron("*/5 * * * *").Do(job)
 	if err != nil {
 		log.Fatalln("error scheduling job", err)
 	}
@@ -38,6 +40,8 @@ func Run(contractsCfg entity.ContractsSettings) {
 	strategy = strategy_collector.New(contractsCfg, httpClient, rpc)
 	vault = vault_collector.New(contractsCfg, rpc)
 	balance = balance_collector.New(contractsCfg, httpClient)
+
+	fmt.Println(balance)
 
 	s := gocron.NewScheduler(time.UTC)
 	s.SingletonModeAll()

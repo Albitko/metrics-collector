@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/go-co-op/gocron"
-
 	"github.com/Albitko/metrics-collector/internal/entity"
 	"github.com/Albitko/metrics-collector/internal/utils"
 )
@@ -23,7 +21,7 @@ type vaultCollector struct {
 	rpcClient rpc
 }
 
-func (vc *vaultCollector) Collect(job gocron.Job) {
+func (vc *vaultCollector) Collect() {
 	fmt.Println("start collecting vaults data at: ", time.Now().String())
 
 	for i, v := range vc.vaults {

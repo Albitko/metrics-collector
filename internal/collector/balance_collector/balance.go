@@ -7,7 +7,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/go-co-op/gocron"
 	"github.com/go-resty/resty/v2"
 
 	"github.com/Albitko/metrics-collector/internal/entity"
@@ -68,7 +67,7 @@ func getVaultBalance(wg *sync.WaitGroup, vault entity.Vault, c *resty.Client) {
 	wg.Done()
 }
 
-func (bc *balanceCollector) Collect(job gocron.Job) {
+func (bc *balanceCollector) Collect() {
 	fmt.Println("start collecting balances at: ", time.Now().String())
 	var wg sync.WaitGroup
 
