@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"math"
+	"math/big"
 	"strings"
 
 	"github.com/ethereum/go-ethereum"
@@ -40,6 +42,13 @@ func (r *ethRPC) Call(contractABI, address, funcName string) ([]interface{}, err
 
 	}
 	return callRes, nil
+}
+
+func CastNumberWithDecimals(number interface{}, decimals int32) float64 {
+	num := new(big.Float).SetInt(number.(*big.Int))
+	dcmls := new(big.Float).SetFloat64(math.Pow(10, float64(decimals)))
+	castedNumber, _ := new(big.Float).Quo(num, dcmls).Float64()
+	return castedNumber
 }
 
 func (r *ethRPC) Close() {

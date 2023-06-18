@@ -9,6 +9,7 @@ import (
 
 	"github.com/Albitko/metrics-collector/internal/collector/price_collector"
 	"github.com/Albitko/metrics-collector/internal/collector/strategy_collector"
+	"github.com/Albitko/metrics-collector/internal/collector/vault_collector"
 	"github.com/Albitko/metrics-collector/internal/entity"
 	"github.com/Albitko/metrics-collector/internal/utils"
 )
@@ -26,7 +27,7 @@ func mustScheduleJob(s *gocron.Scheduler, job interface{}) {
 }
 
 func Run(contractsCfg entity.ContractsSettings) {
-	var price, strategy collector
+	var price, strategy, vault collector
 
 	httpClient := resty.New()
 	rpc := utils.NewRPC()
@@ -34,11 +35,13 @@ func Run(contractsCfg entity.ContractsSettings) {
 
 	price = price_collector.New(contractsCfg, httpClient)
 	strategy = strategy_collector.New(contractsCfg, httpClient, rpc)
+	vault = vault_collector.New(contractsCfg, rpc)
 
 	s := gocron.NewScheduler(time.UTC)
 	s.SingletonModeAll()
 	mustScheduleJob(s, price.Collect)
 	mustScheduleJob(s, strategy.Collect)
+	mustScheduleJob(s, vault.Collect)
 
 	s.StartBlocking()
 

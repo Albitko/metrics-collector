@@ -3,14 +3,13 @@ package strategy_collector
 import (
 	"context"
 	"fmt"
-	"math"
-	"math/big"
 	"time"
 
 	"github.com/go-co-op/gocron"
 	"github.com/go-resty/resty/v2"
 
 	"github.com/Albitko/metrics-collector/internal/entity"
+	"github.com/Albitko/metrics-collector/internal/utils"
 )
 
 const (
@@ -44,10 +43,8 @@ func (sc *strategyCollector) Collect(job gocron.Job) {
 
 	for k, p := range sc.pools {
 		callRes, _ := sc.rpcClient.Call(abi, p.StrategyAddress, "estimatedTotalAssets")
-		amount := new(big.Float).SetInt(callRes[0].(*big.Int))
-		decimals := new(big.Float).SetFloat64(math.Pow(10, float64(p.WantTokenDecimals)))
-		castedAmount, _ := new(big.Float).Quo(amount, decimals).Float64()
-		sc.pools[k].EstimatedTotalAssets = castedAmount
+		totalAssets := utils.CastNumberWithDecimals(callRes[0], p.WantTokenDecimals)
+		sc.pools[k].EstimatedTotalAssets = totalAssets
 		fmt.Println(sc.pools[k])
 	}
 	fmt.Println("finish collecting strategies APY lances at: ", time.Now().String())
